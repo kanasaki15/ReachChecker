@@ -8,6 +8,8 @@ public final class ReachChecker extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
 
+        getServer().getPluginManager().registerEvents(new EventListener(this), this);
+
     }
 
     @Override
