@@ -1,0 +1,5 @@
+name: ReachChecker
+version: @version@
+main: xyz.n7mn.dev.reachchecker.ReachChecker
+authors: [ 7mi_chan ]
+description: ReachChecker
