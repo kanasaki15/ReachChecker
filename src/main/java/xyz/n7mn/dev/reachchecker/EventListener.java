@@ -3,7 +3,6 @@ package xyz.n7mn.dev.reachchecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,9 +29,13 @@ class EventListener implements Listener {
             new Thread(() -> {
                 Player targetPlayer = (Player) entity;
                 Player fromPlayer = (Player) damager;
-                if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
-                    if (fromPlayer.getLocation().getY() == targetPlayer.getLocation().getY()) {
-                        double distance = targetPlayer.getLocation().distance(fromPlayer.getLocation());
+                if (targetPlayer.getNoDamageTicks() == 20) {
+                    if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
+                        double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
+                        x = x * x;
+                        double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
+                        z = z * z;
+                        double distance = Math.sqrt(x + z);
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
                         if (distance >= 3.5) {
 
@@ -59,7 +62,6 @@ class EventListener implements Listener {
 
         if (entity instanceof Player && damager instanceof Player) {
             new Thread(() -> {
-
                 Player targetPlayer = (Player) entity;
                 Player fromPlayer = (Player) damager;
                 if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
@@ -79,7 +81,7 @@ class EventListener implements Listener {
                                 }
                             }
                         }
-                    }else plugin.getLogger().info("[Canceled Check]" + fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + "(" + y + ")") ;
+                    }else plugin.getLogger().info("[Canceled Check]" + fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + "(" + y + ")");
                 }
             }).start();
         }
