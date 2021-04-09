@@ -64,20 +64,22 @@ class EventListener implements Listener {
                 Player fromPlayer = (Player) damager;
                 if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
                     double distance = targetPlayer.getLocation().distance(fromPlayer.getLocation());
+                    double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
+                    if (y <= 3.5) {
+                        plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+                        if (distance >= 4.0) {
 
-                    plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
-                    if (distance >= 4.6) { //Yが一致していない場合にlocationした場合4.5008805456048036の値が出たため...
+                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
-                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                if (player.isOp() || player.hasPermission("reachchecker.op")) {
 
-                            if (player.isOp() || player.hasPermission("reachchecker.op")) {
-
-                                player.sendMessage("" +
-                                        ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
-                                );
+                                    player.sendMessage("" +
+                                            ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
+                                    );
+                                }
                             }
                         }
-                    }
+                    }else plugin.getLogger().info("[Canceled Check]" + fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + "(" + y + ")") ;
                 }
             }).start();
         }
