@@ -29,18 +29,17 @@ class EventListener implements Listener {
                 Player targetPlayer = (Player) entity;
                 Player fromPlayer = (Player) damager;
 
-                double x = Math.abs(targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX());
-                double z = Math.abs(targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ());
+                double distance = targetPlayer.getLocation().distance(fromPlayer.getLocation());
 
-                plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : x " + x + " / z " + z);
-                if (x >= 4 || z >= 4){
+                plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+                if (distance >= 4){
 
                     for (Player player : Bukkit.getServer().getOnlinePlayers()){
 
                         if (player.isOp() || player.hasPermission("reachchecker.op")){
 
                             player.sendMessage("" +
-                                    ChatColor.YELLOW + "[ReachChecker] "+ ChatColor.RESET + fromPlayer.getName()+" : x "+ x + "/ z " + z
+                                    ChatColor.YELLOW + "[ReachChecker] "+ ChatColor.RESET + fromPlayer.getName()+" : " + distance
                             );
 
                         }
