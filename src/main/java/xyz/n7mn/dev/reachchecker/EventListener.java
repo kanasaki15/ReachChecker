@@ -41,7 +41,7 @@ class EventListener implements Listener {
                                 if (player.isOp() || player.hasPermission("reachchecker.op")) {
 
                                     player.sendMessage("" +
-                                            ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
+                                            ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
                                     );
                                 }
                             }
@@ -67,14 +67,14 @@ class EventListener implements Listener {
                     double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
                     if (y <= 3.5) {
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
-                        if (distance >= 4.0) {
+                        if (distance >= 4.1) {
 
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
                                 if (player.isOp() || player.hasPermission("reachchecker.op")) {
 
                                     player.sendMessage("" +
-                                            ChatColor.YELLOW + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
+                                            ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
                                     );
                                 }
                             }
