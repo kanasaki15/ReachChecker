@@ -16,18 +16,18 @@ class EventListener implements Listener {
 
     private final Plugin plugin;
 
-    public EventListener(Plugin plugin){
+    public EventListener(Plugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void d1 (EntityDamageByEntityEvent e){
+    public void d1(EntityDamageByEntityEvent e) {
 
         Entity damager = e.getDamager();
         Entity entity = e.getEntity();
 
-        if (entity instanceof Player && damager instanceof Player){
-            new Thread(()-> {
+        if (entity instanceof Player && damager instanceof Player) {
+            new Thread(() -> {
                 Player targetPlayer = (Player) entity;
                 Player fromPlayer = (Player) damager;
                 if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
@@ -37,7 +37,7 @@ class EventListener implements Listener {
                         if (distance >= 3.5) {
 
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                
+
                                 if (player.isOp() || player.hasPermission("reachchecker.op")) {
 
                                     player.sendMessage("" +
@@ -51,29 +51,31 @@ class EventListener implements Listener {
             }).start();
         }
     }
+
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void d2 (EntityDamageByEntityEvent e){
+    public void d2(EntityDamageByEntityEvent e) {
         Entity damager = e.getDamager();
         Entity entity = e.getEntity();
 
-        if (entity instanceof Player && damager instanceof Player){
-            new Thread(()->{
+        if (entity instanceof Player && damager instanceof Player) {
+            new Thread(() -> {
 
                 Player targetPlayer = (Player) entity;
                 Player fromPlayer = (Player) damager;
+                if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
+                    double distance = targetPlayer.getLocation().distance(fromPlayer.getLocation());
 
-                double distance = targetPlayer.getLocation().distance(fromPlayer.getLocation());
+                    plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+                    if (distance >= 4.6) { //Yが一致していない場合にlocationした場合4.5008805456048036の値が出たため...
 
-                plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
-                if (distance >= 4.6){ //Yが一致していない場合にlocationした場合4.5008805456048036の値が出たため...
+                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
-                    for (Player player : Bukkit.getServer().getOnlinePlayers()){
+                            if (player.isOp() || player.hasPermission("reachchecker.op")) {
 
-                        if (player.isOp() || player.hasPermission("reachchecker.op")){
-
-                            player.sendMessage("" +
-                                    ChatColor.YELLOW + "[ReachChecker] "+ ChatColor.RESET + fromPlayer.getName()+" : " + distance
-                            );
+                                player.sendMessage("" +
+                                        ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
+                                );
+                            }
                         }
                     }
                 }
