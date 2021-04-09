@@ -38,8 +38,11 @@ class EventListener implements Listener {
                     double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
                     plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
                     if (distance >= 3.47) {
+
                         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+
                             if (player.isOp() || player.hasPermission("reachchecker.op")) {
+
                                 player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance);
                             }
                         }
@@ -47,5 +50,6 @@ class EventListener implements Listener {
                 }
             }).start();
         }
+
     }
 }
