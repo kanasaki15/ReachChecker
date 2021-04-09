@@ -41,7 +41,7 @@ class EventListener implements Listener {
                     double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
                     double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
                     plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
-                    if (distance >= 4) {
+                    if (distance >= 3.5) {
 
                         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
