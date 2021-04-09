@@ -35,7 +35,7 @@ class EventListener implements Listener {
                     double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
                     z = z * z;
                     double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
-                    double distance = Math.sqrt(x + z) - (y / 2.5); //1.12.2の場合は下げてもいいかも
+                    double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
                     plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
                     if (distance >= 3.5) {
 
