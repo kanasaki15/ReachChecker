@@ -9,10 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
 class EventListener implements Listener {
-
     private final Plugin plugin;
 
     public EventListener(Plugin plugin) {
@@ -20,7 +20,11 @@ class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void d(EntityDamageByEntityEvent e) {
+    public void EntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
+
+        if (e.isCancelled()){
+            return;
+        }
 
         Entity damager = e.getDamager();
         Entity entity = e.getEntity();
@@ -37,18 +41,23 @@ class EventListener implements Listener {
                     double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
                     double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
                     plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
-                    if (distance >= 3.47) {
-
+                    if (distance >= 3.5) {
                         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-
-                            if (player.isOp() || player.hasPermission("reachchecker.op")) {
-
+                            if (ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
                                 player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance);
                             }
                         }
                     }
                 }
             }).start();
+        }
+
+    }
+    @EventHandler
+    public void PlayerJoinEvent(PlayerJoinEvent e) {
+        if(e.getPlayer().isOp() || e.getPlayer().hasPermission("reachchecker.op")) {
+            ReachChecker.map.put(e.getPlayer().getUniqueId(),"alert.true");
+            e.getPlayer().sendMessage("§e[ReachChecker] §rアラートが§aON§rになりました");
         }
     }
 }
