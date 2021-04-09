@@ -41,7 +41,7 @@ class EventListener implements Listener {
                                 if (player.isOp() || player.hasPermission("reachchecker.op")) {
 
                                     player.sendMessage("" +
-                                            ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
+                                            ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
                                     );
                                 }
                             }
@@ -74,7 +74,7 @@ class EventListener implements Listener {
                                 if (player.isOp() || player.hasPermission("reachchecker.op")) {
 
                                     player.sendMessage("" +
-                                            ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
+                                            ChatColor.YELLOW + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance
                                     );
                                 }
                             }
