@@ -20,7 +20,7 @@ class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void d(EntityDamageByEntityEvent e) {
+    public void EntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
 
         Entity damager = e.getDamager();
         Entity entity = e.getEntity();
