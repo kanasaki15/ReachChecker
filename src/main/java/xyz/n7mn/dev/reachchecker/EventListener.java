@@ -9,11 +9,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
-class EventListener implements Listener {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+class EventListener implements Listener {
     private final Plugin plugin;
+    Map<UUID, Integer> VL = new HashMap<>();
 
     public EventListener(Plugin plugin) {
         this.plugin = plugin;
@@ -22,7 +27,7 @@ class EventListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
 
-        if (e.isCancelled()){
+        if (e.isCancelled()) {
             return;
         }
 
@@ -34,19 +39,31 @@ class EventListener implements Listener {
                 Player targetPlayer = (Player) entity;
                 Player fromPlayer = (Player) damager;
                 if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
-                    double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
-                    x = x * x;
-                    double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
-                    z = z * z;
-                    double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
-                    double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
-                    plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
-                    if (distance >= 3.5) {
-
-                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-
-                            if (player.isOp() || player.hasPermission("reachchecker.op")) {
-                                player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance);
+                    if (fromPlayer.getLocation().getY() != targetPlayer.getLocation().getY()) {
+                        double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
+                        x = x * x;
+                        double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
+                        z = z * z;
+                        double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
+                        double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
+                        plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+                        if (distance >= 4.0 && 12.0 >= distance) {
+                            VL.put(fromPlayer.getUniqueId(), VL.get(fromPlayer.getUniqueId()) + 1);
+                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
+                                    player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + VL.get(fromPlayer.getUniqueId()) + ")");
+                                }
+                            }
+                        }
+                    }else {
+                        double distance = fromPlayer.getLocation().distance(targetPlayer.getLocation());
+                        plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+                        if (distance >= 3.6 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
+                            VL.put(fromPlayer.getUniqueId(), VL.get(fromPlayer.getUniqueId()) + 1);
+                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
+                                    player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + VL.get(fromPlayer.getUniqueId()) + ")");
+                                }
                             }
                         }
                     }
@@ -54,5 +71,20 @@ class EventListener implements Listener {
             }).start();
         }
 
+    }
+
+    @EventHandler
+    public void PlayerJoinEvent(PlayerJoinEvent e) {
+        VLData(e.getPlayer());
+        if (e.getPlayer().isOp() || e.getPlayer().hasPermission("reachchecker.op")) {
+            ReachChecker.map.put(e.getPlayer().getUniqueId(), "alert.true");
+            e.getPlayer().sendMessage("§e[ReachChecker] §rアラートが§aON§rになりました (/alerts で通知を切り替え可能です)");
+        }
+    }
+
+    public void VLData(Player player) {
+        if (!VL.containsKey(player.getUniqueId())) {
+            VL.put(player.getUniqueId(), 0);
+        }
     }
 }
