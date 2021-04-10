@@ -12,13 +12,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 class EventListener implements Listener {
     private final Plugin plugin;
-    Map<UUID, Integer> VL = new HashMap<>();
 
     public EventListener(Plugin plugin) {
         this.plugin = plugin;
@@ -47,22 +42,24 @@ class EventListener implements Listener {
                         double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
                         double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+                        MaxReach(fromPlayer,distance);
                         if (distance >= 4.0 && 12.0 >= distance) {
-                            VL.put(fromPlayer.getUniqueId(), VL.get(fromPlayer.getUniqueId()) + 1);
+                            ReachChecker.VLA.put(fromPlayer.getUniqueId(), ReachChecker.VLA.get(fromPlayer.getUniqueId()) + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
-                                    player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + VL.get(fromPlayer.getUniqueId()) + ")");
+                                    player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + ReachChecker.VLA.get(fromPlayer.getUniqueId()) + ")");
                                 }
                             }
                         }
                     }else {
                         double distance = fromPlayer.getLocation().distance(targetPlayer.getLocation());
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+                        MaxReach(fromPlayer,distance);
                         if (distance >= 3.6 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
-                            VL.put(fromPlayer.getUniqueId(), VL.get(fromPlayer.getUniqueId()) + 1);
+                            ReachChecker.VLB.put(fromPlayer.getUniqueId(), ReachChecker.VLB.get(fromPlayer.getUniqueId()) + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
-                                    player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + VL.get(fromPlayer.getUniqueId()) + ")");
+                                    player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + ReachChecker.VLB.get(fromPlayer.getUniqueId()) + ")");
                                 }
                             }
                         }
@@ -75,16 +72,27 @@ class EventListener implements Listener {
 
     @EventHandler
     public void PlayerJoinEvent(PlayerJoinEvent e) {
-        VLData(e.getPlayer());
+        Data(e.getPlayer());
         if (e.getPlayer().isOp() || e.getPlayer().hasPermission("reachchecker.op")) {
             ReachChecker.map.put(e.getPlayer().getUniqueId(), "alert.true");
             e.getPlayer().sendMessage("§e[ReachChecker] §rアラートが§aON§rになりました (/alerts で通知を切り替え可能です)");
         }
     }
 
-    public void VLData(Player player) {
-        if (!VL.containsKey(player.getUniqueId())) {
-            VL.put(player.getUniqueId(), 0);
+    public void Data(Player player) {
+        if (!ReachChecker.VLA.containsKey(player.getUniqueId())) { //VLで初めてかチェック
+            ReachChecker.VLA.put(player.getUniqueId(), 0);
+            ReachChecker.VLB.put(player.getUniqueId(), 0);
+            ReachChecker.LastReach.put(player.getUniqueId(), 0.0);
+            ReachChecker.MaxReach.put(player.getUniqueId(), 0.0);
+        }
+    }
+
+    public void MaxReach(Player player,double distance) {
+        double MaxReach = (ReachChecker.MaxReach.get(player.getUniqueId()));
+        ReachChecker.LastReach.put(player.getUniqueId(),distance);
+        if(MaxReach < distance) {
+            ReachChecker.MaxReach.put(player.getUniqueId(),distance);
         }
     }
 }
