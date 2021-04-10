@@ -21,7 +21,6 @@ public final class ReachChecker extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EventListener(this), this);
         getCommand("alerts").setExecutor(new AlertsCommand());
         getCommand("look-up").setExecutor(new LookUpCommand());
-
     }
 
     @Override
