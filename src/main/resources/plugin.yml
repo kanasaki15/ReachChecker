@@ -7,3 +7,6 @@ commands:
   alerts:
     usage: '/alerts'
     description: ''
+  look-up:
+    usage: '/look-up <PlayerID>'
+    description: ''
