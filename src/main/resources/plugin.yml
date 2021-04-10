@@ -8,5 +8,5 @@ commands:
     usage: '/alerts'
     description: ''
   look-up:
-    usage: '/look-up <PlayerID>'
+    usage: '/look-up {PLAYER-ID}'
     description: ''
