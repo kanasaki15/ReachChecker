@@ -67,7 +67,6 @@ class EventListener implements Listener {
                 }
             }).start();
         }
-
     }
 
     @EventHandler
