@@ -41,9 +41,10 @@ class EventListener implements Listener {
                         z = z * z;
                         double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
                         double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
-                        plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
+
                         MaxReach(fromPlayer,distance);
                         if (distance >= 4.0 && 12.0 >= distance) {
+                            plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (A)");
                             ReachChecker.VLA.put(fromPlayer.getUniqueId(), ReachChecker.VLA.get(fromPlayer.getUniqueId()) + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
@@ -56,6 +57,7 @@ class EventListener implements Listener {
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance);
                         MaxReach(fromPlayer,distance);
                         if (distance >= 3.6 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
+                            plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (B)");
                             ReachChecker.VLB.put(fromPlayer.getUniqueId(), ReachChecker.VLB.get(fromPlayer.getUniqueId()) + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
