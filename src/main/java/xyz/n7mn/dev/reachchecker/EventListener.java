@@ -99,7 +99,6 @@ class EventListener implements Listener {
 
     public void Data(Player player) {
         if (!ReachChecker.VLA.containsKey(player.getUniqueId())) { //VLで初めてかチェック
-            ReachChecker.PreviewCPS.put(player.getUniqueId(),0);
             ReachChecker.VLA.put(player.getUniqueId(), 0);
             ReachChecker.VLB.put(player.getUniqueId(), 0);
             ReachChecker.PreviewCPS.put(player.getUniqueId(), 0);
