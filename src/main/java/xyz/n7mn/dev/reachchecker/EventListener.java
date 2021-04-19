@@ -81,7 +81,7 @@ class EventListener implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), CPS.get(e.getPlayer().getUniqueId())-1);
+                    ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId())-1);
                 }
             }.runTaskLater(plugin, 20);
         }
@@ -99,7 +99,7 @@ class EventListener implements Listener {
 
     public void Data(Player player) {
         if (!ReachChecker.VLA.containsKey(player.getUniqueId())) { //VLで初めてかチェック
-            CPS.put(player.getUniqueId(),0);
+            ReachChecker.PreviewCPS.put(player.getUniqueId(),0);
             ReachChecker.VLA.put(player.getUniqueId(), 0);
             ReachChecker.VLB.put(player.getUniqueId(), 0);
             ReachChecker.PreviewCPS.put(player.getUniqueId(), 0);
