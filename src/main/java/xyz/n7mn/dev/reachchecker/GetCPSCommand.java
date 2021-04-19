@@ -45,7 +45,7 @@ public class GetCPSCommand implements CommandExecutor {
                     sender.sendMessage("§c何らかの理由でActionBarの表示は中止されました");
                     cancel();
                 }else {
-                    String message = "§b"+sender.getName()+"のCPS: "+ReachChecker.PreviewCPS.get(target.getUniqueId());
+                    String message = "§b"+target.getName()+"のCPS: "+ReachChecker.PreviewCPS.get(target.getUniqueId());
                     sender.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
                 }
             }
