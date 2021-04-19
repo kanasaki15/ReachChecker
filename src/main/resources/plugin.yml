@@ -6,13 +6,7 @@ description: ReachChecker
 commands:
   alerts:
     usage: '/alerts'
-    permission: "reachchecker.alert"
     description: ''
   look-up:
     usage: '/look-up {PLAYER-ID}'
-    permission: "reachchecker.lookup"
-    description: ''
-  cps:
-    usage: '/CPS {PLAYER-ID}'
-    permission: "reachchecker.cps"
     description: ''
