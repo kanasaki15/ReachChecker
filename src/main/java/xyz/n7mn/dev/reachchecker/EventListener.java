@@ -16,17 +16,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-import java.util.HashMap;
-import java.util.UUID;
-
-
 class EventListener implements Listener {
     private final Plugin plugin;
 
     public EventListener(Plugin plugin) {
         this.plugin = plugin;
     }
-    public static HashMap<UUID,Integer> CPS = new HashMap<>();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
@@ -82,12 +77,11 @@ class EventListener implements Listener {
     @EventHandler
     public void ClickCPS(PlayerInteractEvent e) {
         if (e.getAction() == Action.LEFT_CLICK_AIR) {
-            CPS.put(e.getPlayer().getUniqueId(), CPS.get(e.getPlayer().getUniqueId()) + 1);
+            ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()) + 1);
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    CPS.put(e.getPlayer().getUniqueId(), CPS.get(e.getPlayer().getUniqueId())-1);
-                    ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), CPS.get(e.getPlayer().getUniqueId())); //-1
+                    ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), CPS.get(e.getPlayer().getUniqueId())-1);
                 }
             }.runTaskLater(plugin, 20);
         }
