@@ -1,9 +1,6 @@
 package xyz.n7mn.dev.reachchecker;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.n7mn.dev.reachchecker.commands.AlertsCommand;
-import xyz.n7mn.dev.reachchecker.commands.GetCPSCommand;
-import xyz.n7mn.dev.reachchecker.commands.LookUpCommand;
 
 import java.util.HashMap;
 import java.util.UUID;
