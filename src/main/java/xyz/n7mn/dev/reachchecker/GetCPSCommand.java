@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.n7mn.dev.reachchecker.ReachChecker;
 
 
 public class GetCPSCommand implements CommandExecutor {
@@ -27,7 +26,7 @@ public class GetCPSCommand implements CommandExecutor {
         Player s = (Player) sender;
         if (args[0].equals("disable") || args[0].equals("reset")) {
             ReachChecker.ActionBar.remove(s.getUniqueId());
-            s.sendMessage("リセットしました");
+            s.sendMessage("ActionBarの表示を中止させました。");
         }else {
             Player p = Bukkit.getPlayerExact(args[0]);
             if (p == null) {
@@ -43,9 +42,10 @@ public class GetCPSCommand implements CommandExecutor {
             @Override
             public void run() {
                 if (!ReachChecker.ActionBar.containsKey(sender.getUniqueId()) || !sender.isOnline() || !target.isOnline()) {
+                    sender.sendMessage("§c何らかの理由でActionBarの表示は中止されました");
                     cancel();
                 }else {
-                    String message = "§bCPS: "+ReachChecker.PreviewCPS.get(target.getUniqueId())+" (+1足したら正確)";
+                    String message = "§b"+sender.getName()+"のCPS: "+ReachChecker.PreviewCPS.get(target.getUniqueId());
                     sender.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
                 }
             }
