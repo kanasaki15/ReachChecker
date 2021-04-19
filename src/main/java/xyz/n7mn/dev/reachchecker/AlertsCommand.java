@@ -3,6 +3,7 @@ package xyz.n7mn.dev.reachchecker;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.n7mn.dev.reachchecker.ReachChecker;
 
 public class AlertsCommand implements CommandExecutor {
     @Override

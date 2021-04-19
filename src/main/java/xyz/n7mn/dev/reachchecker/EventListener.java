@@ -8,9 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
 
 class EventListener implements Listener {
     private final Plugin plugin;
@@ -67,7 +71,22 @@ class EventListener implements Listener {
                 }
             }).start();
         }
+
     }
+
+    @EventHandler
+    public void ClickCPS(PlayerInteractEvent e) {
+        if (e.getAction() == Action.LEFT_CLICK_AIR) {
+            ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()) + 1);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId())-1);
+                }
+            }.runTaskLater(plugin, 20);
+        }
+    }
+
 
     @EventHandler
     public void PlayerJoinEvent(PlayerJoinEvent e) {
@@ -80,10 +99,13 @@ class EventListener implements Listener {
 
     public void Data(Player player) {
         if (!ReachChecker.VLA.containsKey(player.getUniqueId())) { //VLで初めてかチェック
+            ReachChecker.PreviewCPS.put(player.getUniqueId(),0);
             ReachChecker.VLA.put(player.getUniqueId(), 0);
             ReachChecker.VLB.put(player.getUniqueId(), 0);
+            ReachChecker.PreviewCPS.put(player.getUniqueId(), 0);
             ReachChecker.LastReach.put(player.getUniqueId(), 0.0);
             ReachChecker.MaxReach.put(player.getUniqueId(), 0.0);
+            ReachChecker.ActionBar.put(player.getUniqueId(), false);
         }
     }
 

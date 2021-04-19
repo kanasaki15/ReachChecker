@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.n7mn.dev.reachchecker.ReachChecker;
 
 public class LookUpCommand implements CommandExecutor {
     @Override
@@ -18,7 +19,7 @@ public class LookUpCommand implements CommandExecutor {
         }
         sender.sendMessage("§c§n§o注意！このデータはサーバーが起動されてからの物です！");
         sender.sendMessage("§b======= 結果 "+player.getName()+" =======");
-        sender.sendMessage("§a検出回数(A): "+ReachChecker.VLA.get(player.getUniqueId()));
+        sender.sendMessage("§a検出回数(A): "+ ReachChecker.VLA.get(player.getUniqueId()));
         sender.sendMessage("§a検出回数(B): "+ReachChecker.VLB.get(player.getUniqueId()));
         sender.sendMessage("§e最大リーチ(目安): "+ReachChecker.MaxReach.get(player.getUniqueId()));
         sender.sendMessage("§e最終リーチ(目安): "+ReachChecker.LastReach.get(player.getUniqueId()));
