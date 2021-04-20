@@ -78,6 +78,9 @@ class EventListener implements Listener {
     public void ClickCPS(PlayerInteractEvent e) {
         if (e.getAction() == Action.LEFT_CLICK_AIR) {
             ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()) + 1);
+            if(ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()) > ReachChecker.MaxCPS.get(e.getPlayer().getUniqueId())){
+                ReachChecker.MaxCPS.put(e.getPlayer().getUniqueId(),ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()));
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -101,6 +104,7 @@ class EventListener implements Listener {
         if (!ReachChecker.VLA.containsKey(player.getUniqueId())) { //VLで初めてかチェック
             ReachChecker.VLA.put(player.getUniqueId(), 0);
             ReachChecker.VLB.put(player.getUniqueId(), 0);
+            ReachChecker.MaxCPS.put(player.getUniqueId(), 0);
             ReachChecker.PreviewCPS.put(player.getUniqueId(), 0);
             ReachChecker.LastReach.put(player.getUniqueId(), 0.0);
             ReachChecker.MaxReach.put(player.getUniqueId(), 0.0);
