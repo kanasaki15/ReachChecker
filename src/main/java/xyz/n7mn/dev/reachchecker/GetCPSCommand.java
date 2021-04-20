@@ -20,23 +20,26 @@ public class GetCPSCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length != 1) {
-            return true;
-        }
-        Player s = (Player) sender;
-        if (args[0].equals("disable") || args[0].equals("reset")) {
-            ReachChecker.ActionBar.remove(s.getUniqueId());
-            s.sendMessage("ActionBarの表示を中止させました。");
-        }else {
-            Player p = Bukkit.getPlayerExact(args[0]);
-            if (p == null) {
+        if (sender instanceof Player) {
+            if (args.length != 1) {
                 return true;
             }
-            ReachChecker.ActionBar.put(s.getUniqueId(), true); //なんかmapに保存しなくてもいい気もしてきたけどめんどくさいから
-            ActionBar(s, p);
+            Player s = (Player) sender;
+            if (args[0].equals("disable") || args[0].equals("reset")) {
+                ReachChecker.ActionBar.remove(s.getUniqueId());
+                s.sendMessage("ActionBarの表示を中止させました。");
+            } else {
+                Player p = Bukkit.getPlayerExact(args[0]);
+                if (p == null) {
+                    return true;
+                }
+                ReachChecker.ActionBar.put(s.getUniqueId(), true); //なんかmapに保存しなくてもいい気もしてきたけどめんどくさいから
+                ActionBar(s, p);
+            }
         }
         return true;
     }
+
     public void ActionBar(Player sender,Player target) {
         new BukkitRunnable() {
             @Override
