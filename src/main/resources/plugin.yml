@@ -1,7 +1,7 @@
 name: ReachChecker
 version: @version@
 main: xyz.n7mn.dev.reachchecker.ReachChecker
-authors: [ 7mi_chan ]
+authors: [7mi_chan, Kouta1212, 128bytes(PerfectBoat)]
 description: ReachChecker
 commands:
   alerts:
