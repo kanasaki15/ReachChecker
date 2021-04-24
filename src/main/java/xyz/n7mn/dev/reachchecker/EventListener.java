@@ -59,7 +59,7 @@ class EventListener implements Listener {
                         double distance = fromPlayer.getLocation().distance(targetPlayer.getLocation());
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (B)");
                         MaxReach(fromPlayer,distance);
-                        if (distance >= 3.6 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
+                        if (distance >= 5.5 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
                             ReachChecker.VLB.put(fromPlayer.getUniqueId(), ReachChecker.VLB.get(fromPlayer.getUniqueId()) + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
