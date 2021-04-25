@@ -26,29 +26,28 @@ public class GetCPSCommand implements CommandExecutor {
             }
             Player s = (Player) sender;
             if (args[0].equals("disable") || args[0].equals("reset")) {
-                ReachChecker.ActionBar.remove(s.getUniqueId());
+                ReachChecker.playerdataHashMap.get(s.getUniqueId()).setViewcps(false);
                 s.sendMessage("ActionBarの表示を中止させました。");
             } else {
                 Player p = Bukkit.getPlayerExact(args[0]);
                 if (p == null) {
                     return true;
                 }
-                ReachChecker.ActionBar.put(s.getUniqueId(), true); //なんかmapに保存しなくてもいい気もしてきたけどめんどくさいから
+                ReachChecker.playerdataHashMap.get(s.getUniqueId()).setViewcps(true);
                 ActionBar(s, p);
             }
         }
         return true;
     }
-
     public void ActionBar(Player sender,Player target) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!ReachChecker.ActionBar.containsKey(sender.getUniqueId()) || !sender.isOnline() || !target.isOnline()) {
+                if (!ReachChecker.playerdataHashMap.get(sender.getUniqueId()).isViewcps() || !sender.isOnline() || !target.isOnline()) {
                     sender.sendMessage("§c何らかの理由でActionBarの表示は中止されました");
                     cancel();
                 }else {
-                    String message = "§b"+target.getName()+"のCPS: "+ReachChecker.PreviewCPS.get(target.getUniqueId());
+                    String message = "§b"+target.getName()+"のCPS: "+ReachChecker.playerdataHashMap.get(target.getUniqueId()).getCps();
                     sender.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
                 }
             }

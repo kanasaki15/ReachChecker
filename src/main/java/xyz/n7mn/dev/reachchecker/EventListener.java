@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-
 class EventListener implements Listener {
     private final Plugin plugin;
 
@@ -44,26 +43,34 @@ class EventListener implements Listener {
                         double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
                         z = z * z;
                         double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
+                        PlayerData data = ReachChecker.playerdataHashMap.get(fromPlayer.getUniqueId());
                         double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
+                        data.setLastreach(distance);
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (A)");
-                        MaxReach(fromPlayer,distance);
                         if (distance >= 4.0 && 12.0 >= distance) {
-                            ReachChecker.VLA.put(fromPlayer.getUniqueId(), ReachChecker.VLA.get(fromPlayer.getUniqueId()) + 1);
+                            data.setVLA(data.getVLA() + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
-                                    player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + ReachChecker.VLA.get(fromPlayer.getUniqueId()) + ")");
+                                if (data.isAlert()) {
+                                    player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLA() + ")");
+                                    if (distance > data.getMaxreach()) {
+                                        data.setMaxreach(distance);
+                                    }
                                 }
                             }
                         }
-                    }else {
+                    } else {
+                        PlayerData data = ReachChecker.playerdataHashMap.get(fromPlayer.getUniqueId());
                         double distance = fromPlayer.getLocation().distance(targetPlayer.getLocation());
+                        data.setLastreach(distance);
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (B)");
-                        MaxReach(fromPlayer,distance);
-                        if (distance >= 5.5 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
-                            ReachChecker.VLB.put(fromPlayer.getUniqueId(), ReachChecker.VLB.get(fromPlayer.getUniqueId()) + 1);
+                        if (distance >= 4.0 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
+                            data.setVLB(data.getVLB() + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                if (ReachChecker.map.containsKey(player.getUniqueId()) && ReachChecker.map.get(player.getUniqueId()).equals("alert.true")) {
-                                    player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + ReachChecker.VLB.get(fromPlayer.getUniqueId()) + ")");
+                                if (data.isAlert()) {
+                                    player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ")");
+                                    if (distance > data.getMaxreach()) {
+                                        data.setMaxreach(distance);
+                                    }
                                 }
                             }
                         }
@@ -77,46 +84,28 @@ class EventListener implements Listener {
     @EventHandler
     public void ClickCPS(PlayerInteractEvent e) {
         if (e.getAction() == Action.LEFT_CLICK_AIR) {
-            ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()) + 1);
-            if(ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()) > ReachChecker.MaxCPS.get(e.getPlayer().getUniqueId())){
-                ReachChecker.MaxCPS.put(e.getPlayer().getUniqueId(),ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId()));
+            PlayerData data = ReachChecker.playerdataHashMap.get(e.getPlayer().getUniqueId());
+            data.setCps(data.getCps() + 1);
+            if (data.getCps() > data.getMaxcps()) {
+                data.setMaxcps(data.getCps());
             }
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    ReachChecker.PreviewCPS.put(e.getPlayer().getUniqueId(), ReachChecker.PreviewCPS.get(e.getPlayer().getUniqueId())-1);
+                    data.setCps(data.getCps() - 1);
                 }
             }.runTaskLater(plugin, 20);
         }
     }
 
-
     @EventHandler
     public void PlayerJoinEvent(PlayerJoinEvent e) {
-        Data(e.getPlayer());
-        if (e.getPlayer().isOp() || e.getPlayer().hasPermission("reachchecker.op")) {
-            ReachChecker.map.put(e.getPlayer().getUniqueId(), "alert.true");
-            e.getPlayer().sendMessage("§e[ReachChecker] §rアラートが§aON§rになりました (/alerts で通知を切り替え可能です)");
-        }
-    }
-
-    public void Data(Player player) {
-        if (!ReachChecker.VLA.containsKey(player.getUniqueId())) { //VLで初めてかチェック
-            ReachChecker.VLA.put(player.getUniqueId(), 0);
-            ReachChecker.VLB.put(player.getUniqueId(), 0);
-            ReachChecker.MaxCPS.put(player.getUniqueId(), 0);
-            ReachChecker.PreviewCPS.put(player.getUniqueId(), 0);
-            ReachChecker.LastReach.put(player.getUniqueId(), 0.0);
-            ReachChecker.MaxReach.put(player.getUniqueId(), 0.0);
-            ReachChecker.ActionBar.put(player.getUniqueId(), false);
-        }
-    }
-
-    public void MaxReach(Player player,double distance) {
-        double MaxReach = (ReachChecker.MaxReach.get(player.getUniqueId()));
-        ReachChecker.LastReach.put(player.getUniqueId(),distance);
-        if(MaxReach < distance) {
-            ReachChecker.MaxReach.put(player.getUniqueId(),distance);
+        if (!ReachChecker.playerdataHashMap.containsKey(e.getPlayer().getUniqueId())) {
+            ReachChecker.playerdataHashMap.put(e.getPlayer().getUniqueId(), new PlayerData(e.getPlayer().getUniqueId()));
+            if (e.getPlayer().isOp() || e.getPlayer().hasPermission("reachchecker.op")) {
+                ReachChecker.playerdataHashMap.get(e.getPlayer().getUniqueId()).setIsalert(true);
+                e.getPlayer().sendMessage("§e[ReachChecker] §rアラートが§aON§rになりました (/alerts で通知を切り替え可能です)");
+            }
         }
     }
 }

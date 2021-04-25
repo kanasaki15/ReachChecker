@@ -16,13 +16,14 @@ public class LookUpCommand implements CommandExecutor {
         if (player == null) {
             return true;
         }
+        PlayerData data = ReachChecker.playerdataHashMap.get(player.getUniqueId());
         sender.sendMessage("§c§n§o注意！このデータはサーバーが起動されてからの物です！");
         sender.sendMessage("§b======= 結果 "+player.getName()+" =======");
-        sender.sendMessage("§a検出回数(A): "+ ReachChecker.VLA.get(player.getUniqueId()));
-        sender.sendMessage("§a検出回数(B): "+ReachChecker.VLB.get(player.getUniqueId()));
-        sender.sendMessage("§e最大リーチ(目安): "+ReachChecker.MaxReach.get(player.getUniqueId()));
-        sender.sendMessage("§e最終リーチ(目安): "+ReachChecker.LastReach.get(player.getUniqueId()));
-        sender.sendMessage("§e最大CPS: "+ReachChecker.MaxCPS.get(player.getUniqueId()));
+        sender.sendMessage("§a検出回数(A): "+data.getVLA());
+        sender.sendMessage("§a検出回数(B): "+data.getVLB());
+        sender.sendMessage("§e最大リーチ(目安): "+data.getMaxcps());
+        sender.sendMessage("§e最終リーチ(目安): "+data.getLastreach());
+        sender.sendMessage("§e最大CPS: "+data.getMaxcps());
         sender.sendMessage("§b======= 結果 "+player.getName()+" =======");
     return true;}
 }
