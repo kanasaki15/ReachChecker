@@ -21,7 +21,7 @@ public class LookUpCommand implements CommandExecutor {
         sender.sendMessage("§b======= 結果 "+player.getName()+" =======");
         sender.sendMessage("§a検出回数(A): "+data.getVLA());
         sender.sendMessage("§a検出回数(B): "+data.getVLB());
-        sender.sendMessage("§e最大リーチ(目安): "+data.getMaxcps());
+        sender.sendMessage("§e最大リーチ(目安): "+data.getMaxreach());
         sender.sendMessage("§e最終リーチ(目安): "+data.getLastreach());
         sender.sendMessage("§e最大CPS: "+data.getMaxcps());
         sender.sendMessage("§b======= 結果 "+player.getName()+" =======");
