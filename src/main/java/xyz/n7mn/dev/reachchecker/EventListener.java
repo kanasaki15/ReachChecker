@@ -55,6 +55,10 @@ class EventListener implements Listener {
                                     if (distance > data.getMaxreach()) {
                                         data.setMaxreach(distance);
                                     }
+                                }else {
+                                    if (distance > data.getMaxreach()) {
+                                        data.setMaxreach(distance);
+                                    }
                                 }
                             }
                         }
@@ -68,6 +72,10 @@ class EventListener implements Listener {
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (data.isAlert()) {
                                     player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ")");
+                                    if (distance > data.getMaxreach()) {
+                                        data.setMaxreach(distance);
+                                    }
+                                }else {
                                     if (distance > data.getMaxreach()) {
                                         data.setMaxreach(distance);
                                     }
