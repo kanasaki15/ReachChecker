@@ -85,16 +85,30 @@ class EventListener implements Listener {
     public void ClickCPS(PlayerInteractEvent e) {
         if (e.getAction() == Action.LEFT_CLICK_AIR) {
             PlayerData data = ReachChecker.playerdataHashMap.get(e.getPlayer().getUniqueId());
-            data.setCps(data.getCps() + 1);
-            if (data.getCps() > data.getMaxcps()) {
-                data.setMaxcps(data.getCps());
+            data.setCpsL(data.getCpsL() + 1);
+            if (data.getCpsL() > data.getMaxcpsL()) {
+                data.setMaxcpsL(data.getCpsL());
             }
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    data.setCps(data.getCps() - 1);
+                    data.setCpsL(data.getCpsL() - 1);
                 }
-            }.runTaskLater(plugin, 20);
+            }.runTaskLater(plugin,20);
+        }else {
+            if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
+                PlayerData data = ReachChecker.playerdataHashMap.get(e.getPlayer().getUniqueId());
+                data.setCpsR(data.getCpsR() + 1);
+                if(data.getCpsR() > data.getMaxcpsR()){
+                    data.setMaxcpsR(data.getCpsR());
+                }
+                new BukkitRunnable(){
+                    @Override
+                    public void run(){
+                        data.setCpsR(data.getCpsR() - 1);
+                    }
+                }.runTaskLater(plugin,20);
+            }
         }
     }
 

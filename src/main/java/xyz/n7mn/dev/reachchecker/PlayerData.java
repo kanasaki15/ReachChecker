@@ -10,8 +10,10 @@ public class PlayerData {
     private final UUID uuid;
     private int vlA;
     private int vlB;
-    private int cps;
-    private int maxcps;
+    private int cpsL;
+    private int cpsR;
+    private int maxcpsL;
+    private int maxcpsR;
     private double maxreach;
     private double lastreach;
     private boolean alert;
@@ -21,8 +23,10 @@ public class PlayerData {
         this.uuid = uuid;
         this.vlA = 0;
         this.vlB = 0;
-        this.cps = 0;
-        this.maxcps = 0;
+        this.cpsL = 0;
+        this.cpsR = 0;
+        this.maxcpsL = 0;
+        this.maxcpsR = 0;
         this.maxreach = 0.0;
         this.lastreach = 0.0;
         this.alert = false;
@@ -46,22 +50,37 @@ public class PlayerData {
         this.vlB = vlB;
     }
 
-    public int getCps() {
-        return cps;
+    public int getCpsL() {
+        return cpsL;
     }
 
-    public void setCps(int cps) {
-        this.cps = cps;
+    public void setCpsL(int cpsL) {
+        this.cpsL = cpsL;
     }
 
-    public int getMaxcps() {
-        return maxcps;
+    public int getCpsR() {
+        return cpsR;
     }
 
-    public void setMaxcps(int maxcps) {
-        this.maxcps = maxcps;
+    public void setCpsR(int cpsR) {
+        this.cpsR = cpsR;
     }
 
+    public int getMaxcpsL() {
+        return maxcpsL;
+    }
+
+    public void setMaxcpsL(int maxcpsL) {
+        this.maxcpsL = maxcpsL;
+    }
+
+    public int getMaxcpsR() {
+        return maxcpsR;
+    }
+
+    public void setMaxcpsR(int maxcpsR) {
+        this.maxcpsR = maxcpsR;
+    }
 
     public double getMaxreach() {
         return maxreach;
