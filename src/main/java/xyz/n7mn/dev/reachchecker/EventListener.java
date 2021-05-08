@@ -36,15 +36,15 @@ class EventListener implements Listener {
             new Thread(() -> {
                 Player targetPlayer = (Player) entity;
                 Player fromPlayer = (Player) damager;
+
+                PlayerData data = ReachChecker.playerdataHashMap.get(fromPlayer.getUniqueId());
+
                 if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
                     if (fromPlayer.getLocation().getY() != targetPlayer.getLocation().getY()) {
                         double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
-                        x = x * x;
                         double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
-                        z = z * z;
-                        double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
-                        PlayerData data = ReachChecker.playerdataHashMap.get(fromPlayer.getUniqueId());
-                        double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
+                        double y = targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY();
+                        double distance = Math.sqrt(x * x + z * z + y * y);
                         data.setLastreach(distance);
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (A)");
                         if (distance > data.getMaxreach()) {
@@ -59,14 +59,15 @@ class EventListener implements Listener {
                             }
                         }
                     } else {
-                        PlayerData data = ReachChecker.playerdataHashMap.get(fromPlayer.getUniqueId());
-                        double distance = fromPlayer.getLocation().distance(targetPlayer.getLocation());
+                        double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
+                        double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
+                        double distance = Math.sqrt(x * x + z * z);
                         data.setLastreach(distance);
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (B)");
                         if (distance > data.getMaxreach()) {
                             data.setMaxreach(distance);
                         }
-                        if (distance >= 4.0 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
+                        if (distance >= 3.5 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
                             data.setVLB(data.getVLB() + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
