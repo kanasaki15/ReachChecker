@@ -69,7 +69,7 @@ class EventListener implements Listener {
                         if (distance > data.getMaxreach()) {
                             data.setMaxreach(distance);
                         }
-                        if (distance >= 3.5 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
+                        if (distance >= 3.7 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
                             data.setVLB(data.getVLB() + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
