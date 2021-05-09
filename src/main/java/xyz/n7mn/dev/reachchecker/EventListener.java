@@ -74,7 +74,7 @@ class EventListener implements Listener {
                             if (targetPlayer.getVelocity().getX() >= 0.07 || targetPlayer.getVelocity().getZ() >= 0.07) {
                                 for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                     if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
-                                        player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(C-DEV)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §b§l(" + data.getVLB() + ")");
+                                        player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(C-DEV)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §b§l(" + data.getVLB() + ") Debug: X: "+targetPlayer.getVelocity().getX()+" Z:"+targetPlayer.getVelocity().getX());
                                     }
                                 }
                             }else {
