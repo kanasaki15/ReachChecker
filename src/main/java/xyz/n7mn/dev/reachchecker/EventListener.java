@@ -81,7 +81,7 @@ class EventListener implements Listener {
                                 data.setVLB(data.getVLB() + 1);
                                 for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                     if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
-                                        player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ")");
+                                        player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(B)] " + ChatColor.GOLD + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ") Debug: X: "+targetPlayer.getVelocity().getX()+" Z:"+targetPlayer.getVelocity().getX());
                                     }
                                 }
                             }
