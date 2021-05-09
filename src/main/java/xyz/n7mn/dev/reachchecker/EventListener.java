@@ -49,10 +49,11 @@ class EventListener implements Listener {
                         double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
                         data.setLastreach(distance);
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (A)");
+
                         if (distance > data.getMaxreach()) {
                             data.setMaxreach(distance);
                         }
-                        if (distance >= 4.1 && 12.0 >= distance) {
+                        if (distance >= 4.0 && 12.0 >= distance) {
                             data.setVLA(data.getVLA() + 1);
                             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                 if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
@@ -70,10 +71,18 @@ class EventListener implements Listener {
                             data.setMaxreach(distance);
                         }
                         if (distance >= 3.7 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
-                            data.setVLB(data.getVLB() + 1);
-                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
-                                    player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ")");
+                            if (targetPlayer.getVelocity().getX() >= 0.07 || targetPlayer.getVelocity().getZ() >= 0.07) {
+                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                    if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
+                                        player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(C-DEV)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §b§l(" + data.getVLB() + ")");
+                                    }
+                                }
+                            }else {
+                                data.setVLB(data.getVLB() + 1);
+                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                    if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
+                                        player.sendMessage("" + ChatColor.GOLD + "[ReachChecker(B)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ")");
+                                    }
                                 }
                             }
                         }
