@@ -73,7 +73,7 @@ class EventListener implements Listener {
                                 data.setMaxreach(distance);
                             }
                             if (distance >= 3.7 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
-                                if (targetPlayer.getVelocity().getX() >= 0.07 || targetPlayer.getVelocity().getZ() >= 0.07) {
+                                if (Math.abs(targetPlayer.getVelocity().getX()) + Math.abs(targetPlayer.getVelocity().getZ()) >= 0.07) {
                                     for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                         if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
                                             player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(C-DEV)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §b§l(" + data.getVLB() + ") Debug: X: " + targetPlayer.getVelocity().getX() + " Z:" + targetPlayer.getVelocity().getZ());
