@@ -33,62 +33,65 @@ class EventListener implements Listener {
         Entity entity = e.getEntity();
 
         if (entity instanceof Player && damager instanceof Player) {
-            new Thread(() -> {
-                Player targetPlayer = (Player) entity;
-                Player fromPlayer = (Player) damager;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Player targetPlayer = (Player) entity;
+                    Player fromPlayer = (Player) damager;
 
-                PlayerData data = ReachChecker.playerdataHashMap.get(fromPlayer.getUniqueId());
+                    PlayerData data = ReachChecker.playerdataHashMap.get(fromPlayer.getUniqueId());
 
-                if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
-                    if (fromPlayer.getLocation().getY() != targetPlayer.getLocation().getY()) {
-                        double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
-                        x = x * x;
-                        double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
-                        z = z * z;
-                        double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
-                        double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
-                        data.setLastreach(distance);
-                        plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (A)");
+                    if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
+                        if (fromPlayer.getLocation().getY() != targetPlayer.getLocation().getY()) {
+                            double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
+                            x = x * x;
+                            double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
+                            z = z * z;
+                            double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
+                            double distance = Math.sqrt(x + z) - (y / 7.5); //1.8: 2.5//1.12.2: 7.5
+                            data.setLastreach(distance);
+                            plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (A)");
 
-                        if (distance > data.getMaxreach()) {
-                            data.setMaxreach(distance);
-                        }
-                        if (distance >= 4.0 && 12.0 >= distance) {
-                            data.setVLA(data.getVLA() + 1);
-                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
-                                    player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLA() + ")");
-                                }
+                            if (distance > data.getMaxreach()) {
+                                data.setMaxreach(distance);
                             }
-                        }
-                    } else {
-                        double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
-                        double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
-                        double distance = Math.sqrt(x * x + z * z);
-                        data.setLastreach(distance);
-                        plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (B)");
-                        if (distance > data.getMaxreach()) {
-                            data.setMaxreach(distance);
-                        }
-                        if (distance >= 3.7 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
-                            if (targetPlayer.getVelocity().getX() >= 0.07 || targetPlayer.getVelocity().getZ() >= 0.07) {
+                            if (distance >= 4.0 && 12.0 >= distance) {
+                                data.setVLA(data.getVLA() + 1);
                                 for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                                     if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
-                                        player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(C-DEV)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §b§l(" + data.getVLB() + ") Debug: X: "+targetPlayer.getVelocity().getX()+" Z:"+targetPlayer.getVelocity().getX());
+                                        player.sendMessage("" + ChatColor.YELLOW + "[ReachChecker(A)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLA() + ")");
                                     }
                                 }
-                            }else {
-                                data.setVLB(data.getVLB() + 1);
-                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                    if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
-                                        player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(B)] " + ChatColor.GOLD + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ") Debug: X: "+targetPlayer.getVelocity().getX()+" Z:"+targetPlayer.getVelocity().getX());
+                            }
+                        } else {
+                            double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
+                            double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
+                            double distance = Math.sqrt(x * x + z * z);
+                            data.setLastreach(distance);
+                            plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (B)");
+                            if (distance > data.getMaxreach()) {
+                                data.setMaxreach(distance);
+                            }
+                            if (distance >= 3.7 && 12.0 >= distance) { //1.8: 2.5//1.12.2: 7.5
+                                if (targetPlayer.getVelocity().getX() >= 0.07 || targetPlayer.getVelocity().getZ() >= 0.07) {
+                                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                        if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
+                                            player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(C-DEV)] " + ChatColor.RESET + fromPlayer.getName() + " : " + distance + " §b§l(" + data.getVLB() + ") Debug: X: " + targetPlayer.getVelocity().getX() + " Z:" + targetPlayer.getVelocity().getZ());
+                                        }
+                                    }
+                                } else {
+                                    data.setVLB(data.getVLB() + 1);
+                                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                        if (ReachChecker.playerdataHashMap.get(player.getUniqueId()).isAlert()) {
+                                            player.sendMessage("" + ChatColor.AQUA + "[ReachChecker(B)] " + ChatColor.GOLD + fromPlayer.getName() + " : " + distance + " §6§l(" + data.getVLB() + ") Debug: X: " + targetPlayer.getVelocity().getX() + " Z:" + targetPlayer.getVelocity().getZ());
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }).start();
+            }.runTaskAsynchronously(plugin);
         }
 
     }
