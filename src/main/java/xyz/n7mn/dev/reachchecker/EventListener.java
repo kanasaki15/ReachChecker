@@ -23,9 +23,6 @@ class EventListener implements Listener {
     @EventHandler
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
 
-        if (e.isCancelled()) {
-            return;
-        }
 
         Entity damager = e.getDamager();
         Entity entity = e.getEntity();
@@ -34,6 +31,10 @@ class EventListener implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if (e.isCancelled()) {
+                        cancel();
+                    }
+
                     Player targetPlayer = (Player) entity;
                     Player fromPlayer = (Player) damager;
 
