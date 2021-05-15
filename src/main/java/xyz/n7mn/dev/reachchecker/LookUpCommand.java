@@ -20,10 +20,8 @@ public class LookUpCommand implements CommandExecutor {
         sender.sendMessage("§c§n§o注意！このデータはサーバーが起動されてからの物です！");
         sender.sendMessage("§b======= 結果 "+player.getName()+" =======");
         sender.sendMessage("§a検出回数(A): "+data.getVLA());
-        sender.sendMessage("§a検出回数(B): "+data.getVLB());
         sender.sendMessage("§e最大リーチ(目安): "+data.getMaxreach());
         sender.sendMessage("§e最終リーチ(目安): "+data.getLastreach());
-        sender.sendMessage("§e最大CPS: "+data.getMaxcpsL()+"§b | §e"+data.getMaxcpsR());
         sender.sendMessage("§b======= 結果 "+player.getName()+" =======");
     return true;}
 }

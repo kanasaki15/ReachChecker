@@ -12,7 +12,3 @@ commands:
     usage: '/look-up {PLAYER-ID}'
     permission: "reachchecker.lookup"
     description: ''
-  cps:
-    usage: '/CPS {PLAYER-ID}'
-    permission: "reachchecker.cps"
-    description: ''
