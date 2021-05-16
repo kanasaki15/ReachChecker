@@ -43,8 +43,8 @@ class EventListener implements Listener {
                     if (fromPlayer.getGameMode() != GameMode.CREATIVE) {
                         double x = targetPlayer.getLocation().getX() - fromPlayer.getLocation().getX();
                         double z = targetPlayer.getLocation().getZ() - fromPlayer.getLocation().getZ();
-                        //double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
-                        double distance = Math.sqrt(x * x + z * z); //- (y / 7.5); 一時的にyの減少を消す
+                        double y = Math.abs(targetPlayer.getLocation().getY() - fromPlayer.getLocation().getY());
+                        double distance = Math.sqrt(x * x + z * z) - (y / 7.5);
                         data.setLastreach(distance);
                         plugin.getLogger().info(fromPlayer.getName() + " ---> " + targetPlayer.getName() + " : " + distance + " (A)");
 
